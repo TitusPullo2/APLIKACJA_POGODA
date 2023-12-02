@@ -28,7 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:scr="@color/black_shade_1" />
+            android:src="@color/black_shade_1"
+ />
 
         <TextView
             android:id="@+id/idTVCityName"
@@ -84,10 +85,8 @@
                 android:layout_margin="10dp"
                 android:layout_weight="0.5"
                 android:background="@android:color/transparent"
-                android:scr="@drawable/ic_search"
-                app:tint="@color/white"
-
-                />
+                android:src="@drawable/ic_search"
+                app:tint="@color/white" />
 
 
         </LinearLayout>
