@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.aplikacjapogoda"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.aplikacjapogoda"
@@ -31,7 +31,7 @@ android {
 dependencies {
     implementation("com.google.android.gms:play-services-location:17.1.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.squareup.picasso:2.71828")
+    implementation ("com.squareup.picasso:picasso:2.71828")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
