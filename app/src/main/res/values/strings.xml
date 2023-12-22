@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Aplikacja pogoda</string>
+    <string name="weather">Pogoda</string>
+    <string name="location">Lokalizacja</string>
+    <string name="date">Data</string>
+    <string name="time">Czas</string>
+    <string name="temperature">Temperatura</string>
+    <string name="pressure">Ciśnienie</string>
+    <string name="humidity">Wilgotność</string>
+    <string name="wind">Wiatr</string>
+    <string name="direction">Kierunek</string>
+    <string name="index">Indeks</string>
+    <string name="weatherInfo">Informacje o pogodzie dla // na //</string>
+    <string name="zone">Określ czas i date</string>
+    <string name="locationInfo">Wybierz miejscowość</string>
+    <string name="gpsInfo">Określ lokalizację za pomocą GPS</string>
+    <string name="gps">GPS</string>
+    <string name="search">Szukaj</string>
+</resources>
