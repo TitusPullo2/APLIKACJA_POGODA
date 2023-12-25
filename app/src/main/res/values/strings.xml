@@ -7,13 +7,16 @@
     <string name="temperature">Temperatura</string>
     <string name="pressure">Ciśnienie</string>
     <string name="humidity">Wilgotność</string>
+    <string name="precipitation">Opad</string>
     <string name="wind">Wiatr</string>
     <string name="direction">Kierunek</string>
     <string name="index">Indeks</string>
-    <string name="weatherInfo">Informacje o pogodzie dla // na //</string>
+    <string name="cloudy">Zachmurzenie</string>
     <string name="zone">Określ czas i date</string>
     <string name="locationInfo">Wybierz miejscowość</string>
     <string name="gpsInfo">Określ lokalizację za pomocą GPS</string>
     <string name="gps">GPS</string>
     <string name="search">Szukaj</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>
