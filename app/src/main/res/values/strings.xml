@@ -2,8 +2,8 @@
     <string name="app_name">Aplikacja pogoda</string>
     <string name="weather">Pogoda</string>
     <string name="location">Lokalizacja</string>
-    <string name="date">Data</string>
-    <string name="time">Czas</string>
+    <string name="date">Data (R-M-D)</string>
+    <string name="time">Czas (Godzina)</string>
     <string name="temperature">Temperatura</string>
     <string name="pressure">Ciśnienie</string>
     <string name="humidity">Wilgotność</string>

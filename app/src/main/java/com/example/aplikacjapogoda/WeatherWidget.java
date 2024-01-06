@@ -4,11 +4,22 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class WeatherWidget extends AppWidgetProvider{
+    private TextView weatherIconWidget;
+    private TextView typeWeatherTextViewWidget;
+    private TextView locationTextViewWidget;
+    private TextView dateTextViewWidget;
+    private TextView timeTextViewWidget;
+    private TextView temperatureTextViewWidget;
+    private TextView humidityTextViewWidget;
+    private TextView precipitationTextViewWidget;
+    private TextView windSpeedTextViewWidget;
+    private TextView windDirectionViewWidget;
+    private TextView pressureTextViewWidget;
+    private TextView indexUvTextViewWidget;
+    private TextView cloudyTextViewWidget;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId){
         // Construct the RemoteViews object

@@ -10,20 +10,20 @@
       android:fillColor="#57a0ee"
       android:strokeColor="#fff"/>
   <path
-      android:pathData="M23.336,34.242L21.946,42.121"
-      android:strokeWidth="3"
+      android:pathData="M22.888,34.29L21.499,42.169"
+      android:strokeWidth="2"
       android:fillColor="#00000000"
       android:strokeColor="#91c0f8"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="M28.607,33.141L27.218,41.019"
-      android:strokeWidth="3"
+      android:pathData="M27.174,33.015L25.785,40.894"
+      android:strokeWidth="2"
       android:fillColor="#00000000"
       android:strokeColor="#91c0f8"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="M33.357,34.994L31.968,42.872"
-      android:strokeWidth="3"
+      android:pathData="M30.94,34.694L29.551,42.573"
+      android:strokeWidth="2"
       android:fillColor="#00000000"
       android:strokeColor="#91c0f8"
       android:strokeLineCap="round"/>

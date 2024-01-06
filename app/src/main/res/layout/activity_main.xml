@@ -9,11 +9,12 @@
 
     <ImageView
         android:id="@+id/weatherIcon"
-        android:layout_width="164dp"
-        android:layout_height="164dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,109 +23,130 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="196dp"
-        android:layout_height="164dp"
+        android:layout_height="128dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/typeWeatherTextView"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="32dp"
             android:text="@string/weather"
-            android:textColor="@color/white" />
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/locationTextView"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="32dp"
             android:text="@string/location"
-            android:textColor="@color/white" />
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/dateTextView"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="32dp"
             android:text="@string/date"
-            android:textColor="@color/white" />
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/timeTextView"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="32dp"
             android:text="@string/time"
-            android:textColor="@color/white" />
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="376dp"
-        android:layout_height="292dp"
+        android:layout_height="256dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherIcon">
 
         <TextView
             android:id="@+id/temperatureTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/temperature"
-            android:textColor="@color/white" />
+            android:textAlignment="textStart"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/humidityTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/humidity"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/precipitationTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/precipitation"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/windSpeedTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/wind"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/windDirectionextView"
+            android:id="@+id/windDirectionView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/direction"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/pressureTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/pressure"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/indexUvTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/index"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/cloudyTextView"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
             android:text="@string/cloudy"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
@@ -134,45 +156,53 @@
         android:layout_height="144dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/searchButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <TextView
             android:id="@+id/zoneTextView"
-            android:layout_width="126dp"
+            android:layout_width="164dp"
             android:layout_height="48dp"
             android:text="@string/zone"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/white"
+            android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/locTextView"
-            app:layout_constraintEnd_toStartOf="@+id/editTextTime"
+            app:layout_constraintEnd_toStartOf="@+id/timeEditText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextDate"
-            android:layout_width="125dp"
+            android:id="@+id/dateEditText"
+            android:layout_width="100dp"
             android:layout_height="48dp"
             android:ems="10"
-            android:inputType="date"
-            android:text="@string/date"
+            android:hint="@string/date"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/white"
+            android:textColorHint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/locationEditText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editTextTime"
+            app:layout_constraintStart_toEndOf="@+id/timeEditText"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="125dp"
+            android:id="@+id/timeEditText"
+            android:layout_width="110dp"
             android:layout_height="48dp"
             android:ems="10"
-            android:inputType="time"
-            android:text="@string/time"
+            android:hint="@string/time"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/white"
+            android:textColorHint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/locationEditText"
-            app:layout_constraintEnd_toStartOf="@+id/editTextDate"
+            app:layout_constraintEnd_toStartOf="@+id/dateEditText"
             app:layout_constraintStart_toEndOf="@+id/zoneTextView"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -181,7 +211,10 @@
             android:layout_width="172dp"
             android:layout_height="48dp"
             android:text="@string/locationInfo"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
             android:textColor="@color/white"
+            android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/gpsTextView"
             app:layout_constraintEnd_toStartOf="@+id/locationEditText"
             app:layout_constraintStart_toStartOf="parent"
@@ -192,20 +225,24 @@
             android:layout_width="202dp"
             android:layout_height="48dp"
             android:ems="10"
+            android:hint="@string/location"
             android:inputType="text"
-            android:text="@string/location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/white"
+            android:textColorHint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/gpsTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/locTextView"
-            app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+            app:layout_constraintTop_toBottomOf="@+id/dateEditText" />
 
         <TextView
             android:id="@+id/gpsTextView"
             android:layout_width="250dp"
             android:layout_height="48dp"
             android:text="@string/gpsInfo"
+            android:textAlignment="textStart"
             android:textColor="@color/white"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/gpsButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -238,6 +275,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:rippleColor="#331866" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

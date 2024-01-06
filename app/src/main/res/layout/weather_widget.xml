@@ -84,7 +84,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
-                        android:id="@+id/windDirectionextViewWidget"
+                        android:id="@+id/windDirectionViewWidget"
                         android:layout_width="match_parent"
                         android:layout_height="32dp"
                         android:text="@string/direction"
