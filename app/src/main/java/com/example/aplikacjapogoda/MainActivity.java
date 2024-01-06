@@ -1,6 +1,9 @@
 package com.example.aplikacjapogoda;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,11 +92,17 @@ public class MainActivity extends AppCompatActivity{
                 locationCoordinates[1] = String.valueOf(location.getLongitude());
             }
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras){}
+            public void onStatusChanged(String provider, int status, Bundle extras){
+                // Auto-generated method stub
+            }
             @Override
-            public void onProviderEnabled(String provider){}
+            public void onProviderEnabled(String provider){
+                // Auto-generated method stub
+            }
             @Override
-            public void onProviderDisabled(String provider){}
+            public void onProviderDisabled(String provider){
+                // Auto-generated method stub
+            }
         };
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -103,25 +112,28 @@ public class MainActivity extends AppCompatActivity{
         }
         return locationCoordinates;
     }
-    private class FetchWeatherDataTask extends AsyncTask<Void, Void, ArrayList<String>>{
+
+    private class FetchWeatherDataTask extends AsyncTask<Void, Void, ArrayList<String>> {
         String time;
         String date;
         String locationName;
         String locationLatitude;
         String locationLongitude;
 
-        public FetchWeatherDataTask(String time, String date, String locationName, String locationLatitude, String locationLongitude){
+        public FetchWeatherDataTask(String time, String date, String locationName, String locationLatitude, String locationLongitude) {
             this.time = time;
             this.date = date;
             this.locationName = locationName;
             this.locationLatitude = locationLatitude;
             this.locationLongitude = locationLongitude;
         }
+
         @Override
         protected ArrayList<String> doInBackground(Void... voids){
             UserInteraction userInteraction = new UserInteraction(time, date, locationName, locationLatitude, locationLongitude);
             return userInteraction.getWeatherData();
         }
+
         @Override
         protected void onPostExecute(ArrayList<String> weatherData){
             super.onPostExecute(weatherData);
@@ -147,6 +159,19 @@ public class MainActivity extends AppCompatActivity{
             cloudyTextView.setText(cloudy);
             typeWeatherTextView.setText(weatherData.get(11));
             weatherIcon.setImageResource(getResources().getIdentifier(weatherData.get(12), "drawable", getPackageName()));
+
+            SharedPreferences sharedPreferences = getSharedPreferences("WeatherData", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            for (int i = 0; i < weatherData.size(); i++) {
+                editor.putString(String.valueOf(i), weatherData.get(i));
+            }
+            editor.apply();
+
+            Intent intent = new Intent(MainActivity.this, WeatherWidget.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(getComponentName());
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            sendBroadcast(intent);
         }
     }
 }
