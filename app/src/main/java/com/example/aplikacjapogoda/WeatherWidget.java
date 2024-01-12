@@ -44,12 +44,14 @@ public class WeatherWidget extends AppWidgetProvider{
         }
     }
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent){
         super.onReceive(context, intent);
-        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())) {
+
+        if(AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())){
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WeatherWidget.class));
-            for (int appWidgetId : appWidgetIds) {
+
+            for (int appWidgetId : appWidgetIds){
                 updateAppWidget(context, appWidgetManager, appWidgetId);
             }
         }

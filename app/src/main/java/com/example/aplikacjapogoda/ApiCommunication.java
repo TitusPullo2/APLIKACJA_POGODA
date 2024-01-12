@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -89,7 +90,7 @@ public class ApiCommunication{
             return stringBuilder.toString();
         }
     }
-    public String getForecastWeather() throws IOException{
+    public String getForecastWeather() throws IOException, DateTimeParseException{
         URL url;
         String replacedUrl;
         if(locationName != null){

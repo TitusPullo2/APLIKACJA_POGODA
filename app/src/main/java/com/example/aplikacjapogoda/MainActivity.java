@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity{
         }
         return locationCoordinates;
     }
-
     private class FetchWeatherDataTask extends AsyncTask<Void, Void, ArrayList<String>> {
         String time;
         String date;
