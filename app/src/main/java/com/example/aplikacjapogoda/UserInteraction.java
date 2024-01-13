@@ -8,15 +8,28 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
+/**
+ * Klasa odpowiedzialna za przetwarzanie danych wprowadzonych przez użytkownika i odpowiedzi z API.
+ */
 public class UserInteraction{
-    String time;
-    String date;
-    String locationName;
-    String locationLatitude;
-    String locationLongitude;
+    /**
+     * Dane wprowadzone przez użytkownika.
+     */
+    private String time;
+    private String date;
+    private String locationName;
+    private String locationLatitude;
+    private String locationLongitude;
 
+    /**
+     * Konstruktor klasy UserInteraction.
+     * @param time Czas.
+     * @param date Data.
+     * @param locationName Nazwa lokalizacji.
+     * @param locationLatitude Szerokość geograficzna.
+     * @param locationLongitude Długość geograficzna.
+     */
     public UserInteraction(String time, String date, String locationName, String locationLatitude, String locationLongitude){
         this.time = time;
         this.date = date;
@@ -24,99 +37,39 @@ public class UserInteraction{
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
     }
-    public ArrayList<String> getWeatherData(){
-        String weatherDirectData = "";
+    /**
+     * Metoda odpowiedzialna za pobranie danych pogodowych.
+     * Na podstawie danych wprowadzonych przez użytkownika, wywoływana jest odpowiednia metoda z klasy ApiCommunication.
+     * @return Dane pogodowe w postaci listy.
+     */
+    public ArrayList<String> getWeatherData() {
         ArrayList<String> weatherExtractedData = new ArrayList<>();
+        ApiCommunication apiCommunication;
 
-        if(time.equals("") && date.equals("")){
-            if(!locationName.equals("")){
-                ApiCommunication apiCommunication = new ApiCommunication(locationName);
-                try{
-                    weatherDirectData = apiCommunication.getCurrentWeather();
-                    weatherExtractedData = extractCurrentWeatherData(weatherDirectData);
-                }
-                catch(IOException e){
-                    e.printStackTrace();
-                }
-                catch(JSONException e){
-                    e.printStackTrace();
-                }
+        try{
+            if(time.isEmpty() && date.isEmpty()){
+                apiCommunication = locationName.isEmpty()? new ApiCommunication(locationLatitude, locationLongitude): new ApiCommunication(locationName);
+                weatherExtractedData = extractCurrentWeatherData(apiCommunication.getCurrentWeather());
             }
             else{
-                ApiCommunication apiCommunication = new ApiCommunication(locationLatitude, locationLongitude);
-                try{
-                    weatherDirectData = apiCommunication.getCurrentWeather();
-                    weatherExtractedData = extractCurrentWeatherData(weatherDirectData);
-                }
-                catch(IOException e){
-                    e.printStackTrace();
-                }
-                catch(JSONException e){
-                    e.printStackTrace();
-                }
+                LocalDate localDate = LocalDate.now();
+                LocalDate targetDate = LocalDate.parse(date);
+                apiCommunication = locationName.isEmpty()? new ApiCommunication(locationLatitude, locationLongitude, date, time): new ApiCommunication(locationName, date, time);
+                String weatherDirectData = localDate.isBefore(targetDate)? apiCommunication.getForecastWeather(): apiCommunication.getHistoryWeather();
+                weatherExtractedData = extractOtherWeatherData(weatherDirectData);
             }
         }
-        else{
-            LocalDate localDate = LocalDate.now();
-            LocalDate targetDate = LocalDate.parse(date);
-
-            if(!locationName.equals("")){
-                ApiCommunication apiCommunication = new ApiCommunication(locationName, date, time);
-                if(localDate.isBefore(targetDate)){
-                    try{
-                        weatherDirectData = apiCommunication.getForecastWeather();
-                        weatherExtractedData = extractOtherWeatherData(weatherDirectData);
-                    }
-                    catch(IOException e){
-                        e.printStackTrace();
-                    }
-                    catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    try{
-                        weatherDirectData = apiCommunication.getHistoryWeather();
-                        weatherExtractedData = extractOtherWeatherData(weatherDirectData);
-                    }
-                    catch(IOException e){
-                        e.printStackTrace();
-                    }
-                    catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-            else{
-                ApiCommunication apiCommunication = new ApiCommunication(locationLatitude, locationLongitude, date, time);
-                if(localDate.isBefore(targetDate)){
-                    try{
-                        weatherDirectData = apiCommunication.getForecastWeather();
-                        weatherExtractedData = extractOtherWeatherData(weatherDirectData);
-                    }
-                    catch(IOException e){
-                        e.printStackTrace();
-                    }
-                    catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    try{
-                        weatherDirectData = apiCommunication.getHistoryWeather();
-                        weatherExtractedData = extractOtherWeatherData(weatherDirectData);
-                    }
-                    catch(IOException e){
-                        e.printStackTrace();
-                    }
-                    catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
+        catch (IOException | JSONException e){
+            e.printStackTrace();
         }
         return weatherExtractedData;
     }
+    /**
+     * Metoda odpowiedzialna za ektrakcję danych pogodowych aktualnych z odpowiedzi API.
+     * @param weatherData Dane pogodowe w postaci Stringa.
+     * @return Dane pogodowe w postaci listy.
+     * @throws JSONException Wyjątek rzucany w przypadku błędu podczas parsowania danych JSON.
+     */
     private ArrayList<String> extractCurrentWeatherData(String weatherData) throws JSONException{
         JSONObject jsonObject = new JSONObject(weatherData);
 
@@ -144,10 +97,14 @@ public class UserInteraction{
 
         String icon = setWeatherIcon(isDay, code);
 
-        ArrayList<String> weatherExtractedData = new ArrayList<>(Arrays.asList(name, dateLocal, timeLocal, temperature, humidity, precipiceMm, windKph, windDir, pressureMb, cloud, uv, text, icon));
-
-        return weatherExtractedData;
+        return new ArrayList<>(Arrays.asList(name, dateLocal, timeLocal, temperature, humidity, precipiceMm, windKph, windDir, pressureMb, cloud, uv, text, icon));
     }
+    /**
+     * Metoda odpowiedzialna za ektrakcję danych pogodowych prognozowanych lub historycznych z odpowiedzi API.
+     * @param weatherData Dane pogodowe w postaci Stringa.
+     * @return Dane pogodowe w postaci listy.
+     * @throws JSONException Wyjątek rzucany w przypadku błędu podczas parsowania danych JSON.
+     */
     private ArrayList<String> extractOtherWeatherData(String weatherData) throws JSONException{
         JSONObject jsonObject = new JSONObject(weatherData);
 
@@ -178,10 +135,14 @@ public class UserInteraction{
 
         String icon = setWeatherIcon(isDay, code);
 
-        ArrayList<String> weatherExtractedData = new ArrayList<>(Arrays.asList(name, dateLocal, timeLocal, temperature, humidity, precipiceMm, windKph, windDir, pressureMb, cloud, uv, text, icon));
-
-        return weatherExtractedData;
+        return new ArrayList<>(Arrays.asList(name, dateLocal, timeLocal, temperature, humidity, precipiceMm, windKph, windDir, pressureMb, cloud, uv, text, icon));
     }
+    /**
+     * Metoda odpowiedzialna za ustawienie ikony pogodowej.
+     * @param isDay Czy dzień.
+     * @param code Kod pogodowy.
+     * @return Nazwa ikony pogodowej.
+     */
     private String setWeatherIcon(int isDay, int code){
         String weatherIcon = "";
 
@@ -216,6 +177,7 @@ public class UserInteraction{
                 case 1147:
                     weatherIcon = "frost_day";
                     break;
+                default:
             }
         }
         else{
@@ -249,6 +211,7 @@ public class UserInteraction{
                 case 1147:
                     weatherIcon = "frost_night";
                     break;
+                default:
             }
         }
         switch(code){
@@ -301,6 +264,7 @@ public class UserInteraction{
             case 1264:
                 weatherIcon = "hail";
                 break;
+            default:
         }
         return weatherIcon;
     }

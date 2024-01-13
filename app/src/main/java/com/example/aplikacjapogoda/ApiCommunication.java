@@ -5,48 +5,93 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
+/**
+ * Klasa do komunikacji z WeatherAPI.
+ * Zawiera metody do pobierania danych w formacie json o aktualnej pogodzie, prognozie pogody oraz historii pogody.
+ */
 public class ApiCommunication{
-    private String URL_CURRENT = "https://api.weatherapi.com/v1/current.json?key=8b87ed58de2945a6876205648232812&q={location}&lang=pl&aqi=no";
-    private String URL_FORECAST = "https://api.weatherapi.com/v1/forecast.json?key=8b87ed58de2945a6876205648232812&q={location}&days={numberOfDay}&dt={dateOfDay}&hour={hourOfDay}&lang=pl&aqi=no&alerts=no";
-    private String URL_HISTORY = "https://api.weatherapi.com/v1/history.json?key=8b87ed58de2945a6876205648232812&q={location}&dt={date}&hour={hourOfDay}&lang=pl&aqi=no";
+    /**
+     * Adresy URL do pobierania danych o aktualnej pogodzie, prognozie pogody oraz historii pogody.
+     */
+    private final String URL_CURRENT = "https://api.weatherapi.com/v1/current.json?key=8b87ed58de2945a6876205648232812&q={location}&lang=pl&aqi=no";
+    private final String URL_FORECAST = "https://api.weatherapi.com/v1/forecast.json?key=8b87ed58de2945a6876205648232812&q={location}&days={numberOfDay}&dt={dateOfDay}&hour={hourOfDay}&lang=pl&aqi=no&alerts=no";
+    private final String URL_HISTORY = "https://api.weatherapi.com/v1/history.json?key=8b87ed58de2945a6876205648232812&q={location}&dt={date}&hour={hourOfDay}&lang=pl&aqi=no";
+    /**
+     * Dane do komunikacji z WeatherAPI.
+     */
     private String locationName;
     private String locationLatitude;
     private String locationLongitude;
     private String date;
     private String time;
 
+    /**
+     * Konstruktor klasy ApiCommunication.
+     * Dla pobierania danych o aktualnej pogodzie dla podanej lokalizacji.
+     * @param locationName Nazwa lokalizacji.
+     */
     public ApiCommunication(String locationName){
         this.locationName = locationName;
     }
+    /**
+     * Konstruktor klasy ApiCommunication.
+     * Dla pobierania danych o aktualnej pogodzie dla podachnych współrzędnych geograficznych.
+     * @param locationLatitude Szerokość geograficzna lokalizacji.
+     * @param locationLongitude Długość geograficzna lokalizacji.
+     */
     public ApiCommunication(String locationLatitude, String locationLongitude){
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
     }
+    /**
+     * Konstruktor klasy ApiCommunication.
+     * Dla pobierania danych o prognozie pogody lub historii pogody dla podanej lokalizacji.
+     * @param locationName Nazwa lokalizacji.
+     * @param date Data.
+     * @param time Godzina.
+     */
     public ApiCommunication(String locationName, String date, String time){
         this.locationName = locationName;
         this.date = date;
         this.time = time;
     }
+    /**
+     * Konstruktor klasy ApiCommunication.
+     * Dla pobierania danych o prognozie pogody lub historii pogody dla podanych współrzędnych geograficznych.
+     * @param locationLatitude Szerokość geograficzna lokalizacji.
+     * @param locationLongitude Długość geograficzna lokalizacji.
+     * @param date Data.
+     * @param time Godzina.
+     */
     public ApiCommunication(String locationLatitude, String locationLongitude, String date, String time){
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.date = date;
         this.time = time;
     }
+    /**
+     * Metoda do obliczania liczby dni między dniem aktualnym a dniem podanym w parametrze.
+     * Wymagany przez WeatherAPI do pobierania danych o prognozie pogody.
+     * @return Liczba dni.
+     */
     private String numberOfDays(){
         LocalDate localDate = LocalDate.now();
         LocalDate targetDate = LocalDate.parse(this.date);
         int numberOfDays = targetDate.getDayOfYear() - localDate.getDayOfYear();
         return String.valueOf(numberOfDays);
     }
+    /**
+     * Metoda do tłumaczenia nazwy lokalizacji na język angielski.
+     * Wymagany przez WeatherAPI do pobierania danych o aktualnej pogodzie, prognozie pogody oraz historii pogody.
+     * @return Nazwa lokalizacji w języku angielskim.
+     */
     private String locationNameTranslation(){
         String originalLocationName = this.locationName;
-        String translatedLocationName = "";
+        String translatedLocationName;
         HashMap<String, String> nameTranslation = new HashMap<>();
         nameTranslation.put("Warszawa", "Warsaw");
         nameTranslation.put("Kraków", "Cracow");
@@ -69,6 +114,11 @@ public class ApiCommunication{
         }
         return translatedLocationName;
     }
+    /**
+     * Metoda do pobierania danych o aktualnej pogodzie.
+     * @return Dane o aktualnej pogodzie w postaci String.
+     * @throws IOException Wyjątek rzucany w przypadku błędu połączenia z serwerem.
+     */
     public String getCurrentWeather() throws IOException{
         URL url;
         if(locationName != null){
@@ -90,6 +140,11 @@ public class ApiCommunication{
             return stringBuilder.toString();
         }
     }
+    /**
+     * Metoda do pobierania danych o prognozie pogody.
+     * @return Dane o prognozie pogody w postaci String.
+     * @throws IOException Wyjątek rzucany w przypadku błędu połączenia z serwerem.
+     */
     public String getForecastWeather() throws IOException{
         URL url;
         String replacedUrl;
@@ -121,6 +176,11 @@ public class ApiCommunication{
             return stringBuilder.toString();
         }
     }
+    /**
+     * Metoda do pobierania danych o historii pogody.
+     * @return Dane o historii pogody w postaci String.
+     * @throws IOException Wyjątek rzucany w przypadku błędu połączenia z serwerem.
+     */
     public String getHistoryWeather() throws IOException{
         URL url;
         String replacedUrl;

@@ -10,10 +10,22 @@ import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 
+/**
+ * Klasa do obsługi widgetu
+ */
 public class WeatherWidget extends AppWidgetProvider{
+    /**
+     * Metoda do aktualizacji widgetu
+     * @param context kontekst aplikacji
+     * @param appWidgetManager menadżer widgetów
+     * @param appWidgetId id widgetu
+     */
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId){
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget);
 
+        /*
+          Odbieranie danych z SharedPreferences
+         */
         SharedPreferences sharedPreferences = context.getSharedPreferences("WeatherData", Context.MODE_PRIVATE);
         ArrayList<String> weatherData = new ArrayList<>();
 
@@ -21,6 +33,9 @@ public class WeatherWidget extends AppWidgetProvider{
             weatherData.add(sharedPreferences.getString(String.valueOf(i), ""));
         }
 
+        /*
+          Ustawianie tekstu i ikon w widżecie
+         */
         views.setTextViewText(R.id.locationTextViewWidget, weatherData.get(0));
         views.setTextViewText(R.id.dateTextViewWidget, weatherData.get(1));
         views.setTextViewText(R.id.timeTextViewWidget, weatherData.get(2));
@@ -39,10 +54,15 @@ public class WeatherWidget extends AppWidgetProvider{
     }
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
-        for(int appWidgetId : appWidgetIds){
+        for(int appWidgetId: appWidgetIds){
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
+    /**
+     * Metoda wywoływana po otrzymaniu zakutalizowanej pogody
+     * @param context kontekst aplikacji
+     * @param intent wiadomość
+     */
     @Override
     public void onReceive(Context context, Intent intent){
         super.onReceive(context, intent);
@@ -51,7 +71,7 @@ public class WeatherWidget extends AppWidgetProvider{
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WeatherWidget.class));
 
-            for (int appWidgetId : appWidgetIds){
+            for (int appWidgetId: appWidgetIds){
                 updateAppWidget(context, appWidgetManager, appWidgetId);
             }
         }

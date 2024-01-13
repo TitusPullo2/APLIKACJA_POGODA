@@ -17,13 +17,21 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+/**
+ * Główna aktywność aplikacji zawierająca pola do wprowadzania danych, przyciski oraz pola tekstowe z danymi pogodowymi.
+ * Obsługuje pobieranie współrzędnych GPS i wyświetlanie danych pogodowych.
+ */
 public class MainActivity extends AppCompatActivity{
+    /**
+     * Elementy interfejsu użytkownika.
+     */
     private EditText timeEditText;
     private EditText dateEditText;
     private EditText locationEditText;
@@ -43,11 +51,17 @@ public class MainActivity extends AppCompatActivity{
     private TextView indexUvTextView;
     private TextView cloudyTextView;
 
+    /**
+     * Metoda wywoływana przy tworzeniu aktywności.
+     * Inicjalizuje elementy interfejsu użytkownika.
+     * Ustawia obsługę przycisków.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Inicjalizacja elementów interfejsu użytkownika.
         weatherIcon = findViewById(R.id.weatherIcon);
         typeWeatherTextView = findViewById(R.id.typeWeatherTextView);
         locationTextView = findViewById(R.id.locationTextView);
@@ -61,21 +75,33 @@ public class MainActivity extends AppCompatActivity{
         pressureTextView = findViewById(R.id.pressureTextView);
         indexUvTextView = findViewById(R.id.indexUvTextView);
         cloudyTextView = findViewById(R.id.cloudyTextView);
-
         timeEditText = findViewById(R.id.timeEditText);
         dateEditText = findViewById(R.id.dateEditText);
         locationEditText = findViewById(R.id.locationEditText);
         gpsButton = findViewById(R.id.gpsButton);
         searchButton = findViewById(R.id.searchButton);
 
+        /*
+          Tablice przechowujące współrzędne GPS.
+          Używane w celu przekazania koordynatów z gpsButton do searchButton.
+         */
         String[] locationLatitude = {""};
         String[] locationLongitude = {""};
 
+        /*
+          Obsługa przycisku GPS.
+          Pobiera współrzędne GPS i zapisuje je w tablicach locationLatitude i locationLongitude.
+          Wyświetla komunikat o udostępnieniu współrzędnych.
+         */
         gpsButton.setOnClickListener(v -> getGpsLocation(locationCoordinates -> {
             locationLatitude[0] = locationCoordinates[0];
             locationLongitude[0] = locationCoordinates[1];
-            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Współrzedne udostępnione", Toast.LENGTH_SHORT).show());
+            Toast.makeText(MainActivity.this, "Współrzedne udostępnione", Toast.LENGTH_SHORT).show();
         }));
+        /*
+          Obsługa przycisku Szukaj.
+          Pobiera dane wprowadzone przez użytkownika i wywołuje asynchroniczne pobieranie danych pogodowych z API.
+         */
         searchButton.setOnClickListener(v -> {
             String time = timeEditText.getText().toString();
             String date = dateEditText.getText().toString();
@@ -83,7 +109,11 @@ public class MainActivity extends AppCompatActivity{
             new FetchWeatherDataTask(time, date, locationName, locationLatitude[0], locationLongitude[0]).execute();
         });
     }
-    private String[] getGpsLocation(LocationCallback callback){
+    /**
+     * Metoda pobierająca współrzędne GPS telefonu.
+     * @param callback obiekt implementujący interfejs LocationCallback.
+     */
+    private void getGpsLocation(LocationCallback callback){
         String[] locationCoordinates = new String[2];
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener(){
@@ -92,6 +122,7 @@ public class MainActivity extends AppCompatActivity{
                 locationCoordinates[0] = String.valueOf(location.getLatitude());
                 locationCoordinates[1] = String.valueOf(location.getLongitude());
                 callback.onLocationReceived(locationCoordinates);
+
                 if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                     locationManager.removeUpdates(this);
                 }
@@ -101,11 +132,11 @@ public class MainActivity extends AppCompatActivity{
                 // Auto-generated method stub
             }
             @Override
-            public void onProviderEnabled(String provider){
+            public void onProviderEnabled(@NonNull String provider){
                 // Auto-generated method stub
             }
             @Override
-            public void onProviderDisabled(String provider){
+            public void onProviderDisabled(@NonNull String provider){
                 // Auto-generated method stub
             }
         };
@@ -115,15 +146,30 @@ public class MainActivity extends AppCompatActivity{
         else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
-        return locationCoordinates;
     }
+    /**
+     * Wewnętrzna klasa dziedzicząca po AsyncTask.
+     * Obsługuje asynchroniczne pobieranie danych pogodowych z API i wyświetlanie ich w interfejsie użytkownika.
+     * @see AsyncTask - klasa do wykonywania operacji w tle. Wymagana do obsługi połączenia z API.
+     */
     private class FetchWeatherDataTask extends AsyncTask<Void, Void, ArrayList<String>>{
-        String time;
-        String date;
-        String locationName;
-        String locationLatitude;
-        String locationLongitude;
+        /**
+         * Dane wprowadzone przez użytkownika.
+         */
+        private String time;
+        private String date;
+        private String locationName;
+        private String locationLatitude;
+        private String locationLongitude;
 
+        /**
+         * Konstruktor klasy.
+         * @param time czas.
+         * @param date data.
+         * @param locationName nazwa lokalizacji.
+         * @param locationLatitude szerokość geograficzna.
+         * @param locationLongitude długość geograficzna.
+         */
         public FetchWeatherDataTask(String time, String date, String locationName, String locationLatitude, String locationLongitude){
             this.time = time;
             this.date = date;
@@ -131,11 +177,22 @@ public class MainActivity extends AppCompatActivity{
             this.locationLatitude = locationLatitude;
             this.locationLongitude = locationLongitude;
         }
+        /**
+         * Metoda do pobierania danych pogodowych z API w tle.
+         * @see UserInteraction - klasa do pobierania danych pogodowych z API.
+         * @param voids parametr typu Void.
+         * @return dane pogodowe.
+         */
         @Override
         protected ArrayList<String> doInBackground(Void... voids){
             UserInteraction userInteraction = new UserInteraction(time, date, locationName, locationLatitude, locationLongitude);
             return userInteraction.getWeatherData();
         }
+        /**
+         * Metoda wywoływana po zakończeniu działania metody doInBackground.
+         * Wyświetla dane pogodowe w interfejsie użytkownika.
+         * @param weatherData dane pogodowe.
+         */
         @Override
         protected void onPostExecute(ArrayList<String> weatherData){
             super.onPostExecute(weatherData);
@@ -163,6 +220,10 @@ public class MainActivity extends AppCompatActivity{
             typeWeatherTextView.setText(weatherData.get(11));
             weatherIcon.setImageResource(getResources().getIdentifier(weatherData.get(12), "drawable", getPackageName()));
 
+            /*
+              Zapis danych do SharedPreferences
+              Przekazanie danych do widgetu za pomocą SharedPreferences
+             */
             SharedPreferences sharedPreferences = getSharedPreferences("WeatherData", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             for (int i = 0; i < weatherData.size(); i++) {
@@ -170,6 +231,10 @@ public class MainActivity extends AppCompatActivity{
             }
             editor.apply();
 
+            /*
+              Aktualizacja widgetu za pomocą broadcastu.
+              Aktualizacja widgetu następuje po kliknięciu przycisku "Szukaj".
+             */
             Intent intent = new Intent(MainActivity.this, WeatherWidget.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
             int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(getComponentName());
