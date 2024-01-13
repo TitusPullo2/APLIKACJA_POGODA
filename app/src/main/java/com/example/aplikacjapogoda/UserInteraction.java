@@ -62,7 +62,7 @@ public class UserInteraction{
 
             if(!locationName.equals("")){
                 ApiCommunication apiCommunication = new ApiCommunication(locationName, date, time);
-                if(targetDate.isAfter(localDate)){
+                if(localDate.isBefore(targetDate)){
                     try{
                         weatherDirectData = apiCommunication.getForecastWeather();
                         weatherExtractedData = extractOtherWeatherData(weatherDirectData);
@@ -89,7 +89,7 @@ public class UserInteraction{
             }
             else{
                 ApiCommunication apiCommunication = new ApiCommunication(locationLatitude, locationLongitude, date, time);
-                if(targetDate.isAfter(localDate)){
+                if(localDate.isBefore(targetDate)){
                     try{
                         weatherDirectData = apiCommunication.getForecastWeather();
                         weatherExtractedData = extractOtherWeatherData(weatherDirectData);
@@ -131,8 +131,8 @@ public class UserInteraction{
         String pressureMb = String.valueOf(currentObject.getDouble("pressure_mb"));
         String precipiceMm = String.valueOf(currentObject.getDouble("precip_mm"));
         String humidity = String.valueOf(currentObject.getInt("humidity"));
-        String cloud = String.valueOf(currentObject.getInt("cloud"));
-        String uv = String.valueOf(currentObject.getDouble("uv"));
+        String uv = String.valueOf(currentObject.getInt("cloud"));
+        String cloud = String.valueOf(currentObject.getDouble("uv"));
         int isDay = currentObject.getInt("is_day");
 
         JSONObject conditionObject = currentObject.getJSONObject("condition");
@@ -154,7 +154,9 @@ public class UserInteraction{
         JSONObject locationObject = jsonObject.getJSONObject("location");
         String name = locationObject.getString("name");
 
-        JSONArray dateTimeArray = jsonObject.getJSONArray("forecast").getJSONObject(0).getJSONArray("hour");
+        JSONObject forecastObject = jsonObject.getJSONObject("forecast");
+        JSONArray dateTimeArray = forecastObject.getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour");
+
         JSONObject currentObject = dateTimeArray.getJSONObject(0);
         String localTime = currentObject.getString("time");
         String temperature = currentObject.getString("temp_c");
@@ -163,8 +165,8 @@ public class UserInteraction{
         String pressureMb = String.valueOf(currentObject.getDouble("pressure_mb"));
         String precipiceMm = String.valueOf(currentObject.getDouble("precip_mm"));
         String humidity = String.valueOf(currentObject.getInt("humidity"));
-        String cloud = String.valueOf(currentObject.getInt("cloud"));
-        String uv = String.valueOf(currentObject.getDouble("uv"));
+        String uv = String.valueOf(currentObject.getInt("cloud"));
+        String cloud = String.valueOf(currentObject.getDouble("uv"));
         int isDay = currentObject.getInt("is_day");
 
         JSONObject conditionObject = currentObject.getJSONObject("condition");

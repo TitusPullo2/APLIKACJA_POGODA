@@ -90,7 +90,7 @@ public class ApiCommunication{
             return stringBuilder.toString();
         }
     }
-    public String getForecastWeather() throws IOException, DateTimeParseException{
+    public String getForecastWeather() throws IOException{
         URL url;
         String replacedUrl;
         if(locationName != null){

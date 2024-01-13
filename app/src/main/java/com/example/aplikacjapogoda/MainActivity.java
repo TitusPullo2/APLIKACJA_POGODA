@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,11 +71,11 @@ public class MainActivity extends AppCompatActivity{
         String[] locationLatitude = {""};
         String[] locationLongitude = {""};
 
-        gpsButton.setOnClickListener(v -> {
-            String[] locationCoordinates = getGpsLocation();
+        gpsButton.setOnClickListener(v -> getGpsLocation(locationCoordinates -> {
             locationLatitude[0] = locationCoordinates[0];
             locationLongitude[0] = locationCoordinates[1];
-        });
+            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Współrzedne udostępnione", Toast.LENGTH_SHORT).show());
+        }));
         searchButton.setOnClickListener(v -> {
             String time = timeEditText.getText().toString();
             String date = dateEditText.getText().toString();
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity{
             new FetchWeatherDataTask(time, date, locationName, locationLatitude[0], locationLongitude[0]).execute();
         });
     }
-    private String[] getGpsLocation(){
+    private String[] getGpsLocation(LocationCallback callback){
         String[] locationCoordinates = new String[2];
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener(){
@@ -90,6 +91,10 @@ public class MainActivity extends AppCompatActivity{
             public void onLocationChanged(Location location){
                 locationCoordinates[0] = String.valueOf(location.getLatitude());
                 locationCoordinates[1] = String.valueOf(location.getLongitude());
+                callback.onLocationReceived(locationCoordinates);
+                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    locationManager.removeUpdates(this);
+                }
             }
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras){
@@ -112,30 +117,29 @@ public class MainActivity extends AppCompatActivity{
         }
         return locationCoordinates;
     }
-    private class FetchWeatherDataTask extends AsyncTask<Void, Void, ArrayList<String>> {
+    private class FetchWeatherDataTask extends AsyncTask<Void, Void, ArrayList<String>>{
         String time;
         String date;
         String locationName;
         String locationLatitude;
         String locationLongitude;
 
-        public FetchWeatherDataTask(String time, String date, String locationName, String locationLatitude, String locationLongitude) {
+        public FetchWeatherDataTask(String time, String date, String locationName, String locationLatitude, String locationLongitude){
             this.time = time;
             this.date = date;
             this.locationName = locationName;
             this.locationLatitude = locationLatitude;
             this.locationLongitude = locationLongitude;
         }
-
         @Override
         protected ArrayList<String> doInBackground(Void... voids){
             UserInteraction userInteraction = new UserInteraction(time, date, locationName, locationLatitude, locationLongitude);
             return userInteraction.getWeatherData();
         }
-
         @Override
         protected void onPostExecute(ArrayList<String> weatherData){
             super.onPostExecute(weatherData);
+
             String temperature = "Temperatura: " + weatherData.get(3) + "°C";
             String humidity = "Wilgotność: " + weatherData.get(4) + "%";
             String precipitation = "Opady: " + weatherData.get(5) + " mm";
